@@ -1,0 +1,122 @@
+/*search input css*/
+
+#filter-block {
+  flex-wrap: wrap;
+  position: sticky;
+  position: -webkit-sticky; /* Safari */
+  z-index: 1;
+  top: -7px;
+  padding: 10px 2.5% 5%;
+  background-color: #444;
+}
+#filter-block input {
+  padding-left: 24px;
+}
+#filter-block i {
+  position: absolute;
+  top: 17px;
+  left: 11px;
+  font-size: 16px;
+  z-index: 1;
+}
+
+#filter-block input:focus {
+  border: 1px solid #ddd;
+  box-shadow: 1px 1px #ddd;
+  -moz-box-shadow: 1px 1px #ddd;
+  -webkit-box-shadow: 1px 1px #ddd;
+}
+
+#filter-block input::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: inherit;
+  opacity: 1; /* Firefox */
+}
+
+#filter-block input:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: inherit;
+}
+
+#filter-block input::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: inherit;
+}
+
+#filter-block .form-control {
+  display: block;
+  width: 100%;
+  height: 30px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.2);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+/*end of search input css*/
+
+/*toolbar css*/
+.gjs-toolbar {
+  background-color: transparent !important;
+}
+.gjs-toolbar-item {
+  display: inline-table !important;
+  color: #fff;
+  background-color: #161c2e;
+  border-color: #161c2e;
+  margin: 0 1px;
+  border-radius: 50px;
+}
+
+/*asset manager*/
+
+.gjs-am-meta {
+  width: 100% !important;
+}
+.gjs-am-close {
+  top: unset !important;
+  background: #000;
+  color: #fff !important;
+  z-index: 1 !important;
+  opacity: unset !important;
+}
+.gjs-am-preview-cont {
+  width: 100% !important;
+  height: 70% !important;
+}
+#unsplash-search-input {
+  margin-bottom: 10px;
+}
+#unsplash-search-form {
+  display: flex;
+  display: -webkit-flex;
+}
+#unsplash-search-btn:disabled:hover {
+  cursor: not-allowed;
+}
+.gjs-am-assets-cont {
+  height: 460px !important;
+}
+.gjs-am-tab {
+  overflow: hidden;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+}
+.gjs-am-tab button {
+  background-color: inherit;
+  color: inherit;
+  float: left;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 13px;
+  transition: 0.3s;
+}
+.gjs-am-tab button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.gjs-am-tab button.active {
+  background-color: rgba(0, 0, 0, 0.2);
+}
