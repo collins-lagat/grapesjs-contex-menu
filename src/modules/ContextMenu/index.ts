@@ -3,6 +3,7 @@ import $ from "jquery";
 import defaults from "./config";
 import { ContextMenu } from "./model";
 import ContextMenuView from "./view";
+import "./assets/main.css";
 
 Backbone.$ = $;
 
@@ -31,7 +32,7 @@ export interface ModuleConfig {
 export class ContextMenuManager implements IModule<typeof defaults> {
   name: string;
   em: any;
-  config: {};
+  config: typeof defaults;
   model: ContextMenu;
   view?: ContextMenuView;
 
@@ -41,6 +42,21 @@ export class ContextMenuManager implements IModule<typeof defaults> {
     this.config = defaults;
 
     this.model = new ContextMenu(this);
+    this.model.on("change:open", (m: ContextMenu, enable: boolean) => {
+      em.trigger(`context-menu:${enable ? "open" : "close"}`);
+    });
+
+    this.em.on("block:drag", () => {
+      this.close();
+    });
+    this.em.on("load", () => {
+      this.em
+        .get("Canvas")
+        .getBody()
+        .addEventListener("click", () => {
+          this.close();
+        });
+    });
   }
 
   init(cfg: any): void {}
@@ -49,8 +65,37 @@ export class ContextMenuManager implements IModule<typeof defaults> {
 
   onLoad?(): void {}
 
-  postRender?(view: any): void {
-    this.render();
+  postRender(view: any): void {
+    const el = view.model.getConfig().el || view.el;
+    const res = this.render();
+    if (res) {
+      el?.appendChild(res);
+    }
+  }
+
+  setContent(content: string | HTMLElement): ContextMenuManager {
+    this.model.set("content", " ");
+    this.model.set("content", content);
+    return this;
+  }
+
+  setPosition(position: { x: number; y: number }): ContextMenuManager {
+    this.model.set("position", position);
+    return this;
+  }
+
+  open(opts: any = {}) {
+    const attr = opts.attributes || {};
+    opts.content && this.setContent(opts.content);
+    this.model.set("attributes", attr);
+    this.model.open();
+    this.view?.updateAttr(attr);
+    return this;
+  }
+
+  close() {
+    this.model.close();
+    return this;
   }
 
   render(): HTMLElement | undefined {

@@ -1,16 +1,15 @@
 import type grapesjs from "grapesjs";
+import _ from "lodash";
+import { OpenToolbar } from "../commands";
+import { cmdCustomOpenToolbar } from "../constants";
 
-export default (editor: grapesjs.Editor, opts?: Record<string, any>) => {
+export default (editor: ExtendedEditor, opts?: Record<string, any>) => {
   const { ContextMenu } = editor;
 
-  const swv = "sw-visibility";
-  const expt = "export-template";
   const osm = "open-sm";
   const otm = "open-tm";
   const ola = "open-layers";
   const obl = "open-blocks";
-  const ful = "fullscreen";
-  const prv = "preview";
   const iconStyle = 'style="display: block"';
 
   editor.Panels.getPanels().reset([
@@ -61,4 +60,65 @@ export default (editor: grapesjs.Editor, opts?: Record<string, any>) => {
       ],
     },
   ]);
+
+  const cm = editor.DomComponents;
+  cm.getTypes().forEach(({ id, view: TypeView }) => {
+    if (id !== "iframe") {
+      cm.addType(id, {
+        extendFn: ["initToolbar"],
+        view: {
+          events() {
+            let toExtend;
+            if (
+              TypeView.prototype.events &&
+              typeof TypeView.prototype.events === "function"
+            ) {
+              toExtend = TypeView.prototype.events();
+            } else if (
+              TypeView.prototype.events &&
+              typeof TypeView.prototype.events === "object"
+            ) {
+              toExtend = TypeView.prototype.events;
+            } else {
+              toExtend = {};
+            }
+            // Add missing contextmenu event
+            return _.extend({}, toExtend, {
+              contextmenu(e: MouseEvent) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (id !== "text") {
+                  const { left, top } =
+                    editor.Canvas.getFrameEl().getBoundingClientRect();
+                  const event = {
+                    ...e,
+                    clientX: e.clientX - left,
+                    clientY: e.clientY - top,
+                  };
+                  this.model.trigger("contextmenu", { event, view: this });
+                }
+              },
+            });
+          },
+        },
+      });
+    }
+  });
+
+  editor.Commands.add(cmdCustomOpenToolbar, OpenToolbar);
+
+  editor.on(`component:mount`, (model) => {
+    const currentView = model.getCurrentView();
+    if (currentView) {
+      currentView.listenTo(model, "contextmenu", ({ view, event }) => {
+        editor.em.setSelected(view.model);
+
+        if (editor.Commands.isActive(cmdCustomOpenToolbar)) {
+          editor.stopCommand(cmdCustomOpenToolbar, {});
+        }
+
+        editor.runCommand(cmdCustomOpenToolbar, { event });
+      });
+    }
+  });
 };

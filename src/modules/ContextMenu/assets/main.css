@@ -1,0 +1,15 @@
+.ctx-container {
+  background-color: black;
+  color: white;
+  box-shadow: 0 18px 50px #070c1885;
+  border: 1px solid #c4d1ed3d;
+  color: #a6a9ac;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  max-width: calc(100vw - 32px);
+  opacity: 1;
+  position: fixed;
+  z-index: 5;
+}

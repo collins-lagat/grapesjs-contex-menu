@@ -7,7 +7,7 @@ export const useEditor = () => {
   const [editor, setEditor] = useState<grapesjs.Editor | null>(null);
 
   useEffect(() => {
-    const editorInstance = grapesjs.init(config);
+    const editorInstance = grapesjs.init(config) as ExtendedEditor;
     setEditor(editorInstance);
   }, [config]);
 

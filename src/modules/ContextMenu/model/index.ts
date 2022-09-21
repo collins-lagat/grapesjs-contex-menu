@@ -3,8 +3,8 @@ import { Model } from "backbone";
 export class ContextMenu extends Model {
   defaults() {
     return {
-      title: "",
       content: "",
+      position: { x: 0, y: 0 },
       attributes: {},
       open: false,
     };
